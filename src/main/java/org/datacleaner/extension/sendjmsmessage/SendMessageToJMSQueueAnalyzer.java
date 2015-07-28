@@ -47,6 +47,9 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
     @Configured(PROPERTY_INPUT_COLUMNS)
     InputColumn<?>[] values;
 
+    @Configured
+    boolean includeHeader = true;
+
     @Configured(PROPERTY_FIELD_NAMES)
     @MappedProperty(PROPERTY_INPUT_COLUMNS)
     String[] fields;
@@ -136,16 +139,21 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
         }
     }
 
-    protected String buildMessageBodyFromTemplate(String template, String[] keys, List<Object> values) {
-        if (template == null || keys == null || values == null) {
+    protected String buildMessageBodyFromTemplate(String messageTemplateString, String[] keys, List<Object> values) {
+        StringBuilder message = new StringBuilder();
+        if (includeHeader) {
+            message.append(messageTemplateString).append("\n");
+        }
+        if (messageTemplateString == null || keys == null || values == null) {
             return "";
         }
         for (int i = 0; i < keys.length; i++) {
             String key = keys[i];
             Object value = values.get(i);
-            template = replaceAll(template, key, value);
+            messageTemplateString = replaceAll(messageTemplateString, key, value);
         }
-        return template;
+        message.append(messageTemplateString);
+        return message.toString();
     }
 
     /**
