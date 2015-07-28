@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.metamodel.util.FileHelper;
@@ -69,6 +70,7 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
     @Configured
     String templateEncoding = "UTF-8";
 
+    @Inject
     @Provided
     ComponentContext _componentContext;
 
