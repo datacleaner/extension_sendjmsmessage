@@ -193,7 +193,9 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
     @Close
     public void close() {
         try {
-            _jmsMessageSender.close();
+            if (_jmsMessageSender != null) {
+                _jmsMessageSender.close();
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Stopping CamelContext failed", e);
         }
