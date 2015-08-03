@@ -28,4 +28,45 @@ public class SendMessageToJMSQueueAnalyzerTest extends TestCase {
         assertEquals(messageBody, "a;b\n1;2");
 
     }
+
+    @Test
+    public void testBuildMessageBodyFromTemplateWithEmptyValues() {
+        String template = "a;b;c";
+        String[] keys = { "a", "b", "c" };
+        List<Object> values = new ArrayList<Object>();
+        values.add("foo");
+        values.add("");
+        values.add("baz");
+        String messageBody = analyzer.buildMessageBodyFromTemplate(template, keys, values);
+        assertEquals("a;b;c" + "\n" + "foo;;baz", messageBody);
+
+        values = new ArrayList<Object>();
+        values.add("");
+        values.add(Integer.valueOf(2));
+        values.add(Integer.valueOf(3));
+        messageBody = analyzer.buildMessageBodyFromTemplate(template, keys, values);
+        assertEquals(messageBody, "a;b;c\n;2;3");
+
+    }
+
+    @Test
+    public void testBuildMessageBodyFromTemplateWithNullValuesShouldBecomeEmpty() {
+        String template = "a;b;c";
+        String[] keys = { "a", "b", "c" };
+        List<Object> values = new ArrayList<Object>();
+        values.add("foo");
+        values.add(null);
+        values.add("baz");
+        String messageBody = analyzer.buildMessageBodyFromTemplate(template, keys, values);
+        assertEquals("a;b;c" + "\n" + "foo;;baz", messageBody);
+
+        values = new ArrayList<Object>();
+        values.add(null);
+        values.add(Integer.valueOf(2));
+        values.add(Integer.valueOf(3));
+        messageBody = analyzer.buildMessageBodyFromTemplate(template, keys, values);
+        assertEquals(messageBody, "a;b;c\n;2;3");
+
+    }
+
 }

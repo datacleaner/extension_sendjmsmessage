@@ -172,7 +172,7 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
         }
 
         if (value == null) {
-            value = "<null>";
+            value = "";
         }
 
         // template is not null, no check needed
