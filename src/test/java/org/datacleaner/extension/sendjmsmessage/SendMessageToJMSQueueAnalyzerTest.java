@@ -16,10 +16,10 @@ public class SendMessageToJMSQueueAnalyzerTest extends TestCase {
         String template = "a;b";
         String[] keys = { "a", "b" };
         List<Object> values = new ArrayList<Object>();
-        values.add("foo");
+        values.add("foo$");
         values.add("bar");
         String messageBody = analyzer.buildMessageBodyFromTemplate(template, keys, values);
-        assertEquals("a;b" + "\n" + "foo;bar", messageBody);
+        assertEquals("a;b" + "\n" + "foo$;bar", messageBody);
 
         values = new ArrayList<Object>();
         values.add(Integer.valueOf(1));
