@@ -6,7 +6,7 @@
 		<version>4.0</version>
 	</parent>
 	<properties>
-		<camel.version>2.10.1</camel.version>
+		<camel.version>2.15.2</camel.version>
 	</properties>
 	<groupId>org.eobjects.datacleaner.extensions</groupId>
 	<artifactId>DataCleaner-sendjmsmessage</artifactId>
