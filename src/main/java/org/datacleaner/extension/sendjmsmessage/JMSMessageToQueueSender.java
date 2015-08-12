@@ -1,8 +1,6 @@
 package org.datacleaner.extension.sendjmsmessage;
 
-import javax.jms.ConnectionFactory;
-
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -31,7 +29,8 @@ public class JMSMessageToQueueSender {
     public JMSMessageToQueueSender(String broker, String queueName) throws Exception {
         camelContext = new DefaultCamelContext();
 
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(broker);
+        PooledConnectionFactory connectionFactory = new PooledConnectionFactory(broker);
+        connectionFactory.setMaxConnections(10);
         final StringBuilder toEndpointUrl = new StringBuilder("jms:queue:").append(queueName);
         LOGGER.debug("connectionFactory {}", connectionFactory);
         // Note we can explicit name the component
