@@ -13,6 +13,7 @@ import org.apache.metamodel.util.FileHelper;
 import org.apache.metamodel.util.Func;
 import org.apache.metamodel.util.Resource;
 import org.datacleaner.api.Analyzer;
+import org.datacleaner.api.Categorized;
 import org.datacleaner.api.Close;
 import org.datacleaner.api.ComponentContext;
 import org.datacleaner.api.Concurrent;
@@ -25,6 +26,7 @@ import org.datacleaner.api.InputRow;
 import org.datacleaner.api.MappedProperty;
 import org.datacleaner.api.Provided;
 import org.datacleaner.api.Validate;
+import org.datacleaner.components.categories.WriteSuperCategory;
 import org.datacleaner.components.convert.ConvertToStringTransformer;
 
 import com.google.common.base.Strings;
@@ -36,6 +38,7 @@ import com.google.common.base.Strings;
 @Concurrent(true)
 @Named("Send message to JMS queue")
 @Description("Sends messages using a template file in which values can be dynamically merged into the message.")
+@Categorized(superCategory = WriteSuperCategory.class)
 public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQueueAnalyzerResult> {
 
     private static final String PROPERTY_INPUT_COLUMNS = "Values";
