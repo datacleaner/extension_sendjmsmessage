@@ -1,2 +1,2 @@
 # extension_sendjmsmessage
-Extension to send JMS messages to an Active MQ queue.
+Datacleaner extension to send messages to a JMS queue.
