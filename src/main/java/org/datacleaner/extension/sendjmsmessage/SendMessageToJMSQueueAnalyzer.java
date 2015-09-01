@@ -13,6 +13,7 @@ import org.apache.metamodel.util.FileHelper;
 import org.apache.metamodel.util.Func;
 import org.apache.metamodel.util.Resource;
 import org.datacleaner.api.Analyzer;
+import org.datacleaner.api.Categorized;
 import org.datacleaner.api.Close;
 import org.datacleaner.api.ComponentContext;
 import org.datacleaner.api.Concurrent;
@@ -25,9 +26,8 @@ import org.datacleaner.api.InputRow;
 import org.datacleaner.api.MappedProperty;
 import org.datacleaner.api.Provided;
 import org.datacleaner.api.Validate;
+import org.datacleaner.components.categories.WriteSuperCategory;
 import org.datacleaner.components.convert.ConvertToStringTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
@@ -38,18 +38,14 @@ import com.google.common.base.Strings;
 @Concurrent(true)
 @Named("Send message to JMS queue")
 @Description("Sends messages using a template file in which values can be dynamically merged into the message.")
+@Categorized(superCategory = WriteSuperCategory.class)
 public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQueueAnalyzerResult> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SendMessageToJMSQueueAnalyzer.class);
 
     private static final String PROPERTY_INPUT_COLUMNS = "Values";
     private static final String PROPERTY_FIELD_NAMES = "Fields";
 
     @Configured(PROPERTY_INPUT_COLUMNS)
     InputColumn<?>[] values;
-
-    @Configured
-    boolean includeHeader = true;
 
     @Configured(PROPERTY_FIELD_NAMES)
     @MappedProperty(PROPERTY_INPUT_COLUMNS)
@@ -127,7 +123,8 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
         final String messageBody = buildMessageBodyFromTemplate(_messageTemplateString, fields, rowValues);
         final String id = ConvertToStringTransformer.transformValue(row.getValue(idColumn));
 
-        final SendMessageToJMSQueueResult result = _jmsMessageSender.sendMessage(brokerUrl, jmsQueueName, messageBody, id);
+        final SendMessageToJMSQueueResult result = _jmsMessageSender.sendMessage(brokerUrl, jmsQueueName, messageBody,
+                id);
         if (result.isSuccessful()) {
             _successCount.incrementAndGet();
         } else {
@@ -135,16 +132,15 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
 
             // report to the execution log
             final Exception error = result.getError();
-            _componentContext.publishMessage(new ExecutionLogMessage("Sending Message '" + result.getMessageIdentifier()
-                    + " failed! " + (error == null ? "" : error.getMessage())));
+            _componentContext.publishMessage(new ExecutionLogMessage("Sending Message '"
+                    + result.getMessageIdentifier() + " failed! " + (error == null ? "" : error.getMessage())));
         }
     }
 
     protected String buildMessageBodyFromTemplate(String messageTemplateString, String[] keys, List<Object> values) {
         StringBuilder message = new StringBuilder();
-        if (includeHeader) {
-            message.append(messageTemplateString).append("\n");
-        }
+        message.append(messageTemplateString).append("\n");
+
         if (messageTemplateString == null || keys == null || values == null) {
             return "";
         }
