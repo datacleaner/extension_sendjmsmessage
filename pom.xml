@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.eobjects.datacleaner</groupId>
 		<artifactId>DataCleaner</artifactId>
-		<version>4.0.10</version>
+		<version>4.0.11</version>
 	</parent>
 	<properties>
 		<camel.version>2.15.2</camel.version>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>org.eobjects.datacleaner</groupId>
 			<artifactId>DataCleaner-desktop-ui</artifactId>
-			<version>4.0.10</version>
+			<version>4.0.11</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -113,6 +113,14 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<scm>
+		<url>https://github.com/datacleaner/extension_sendjmsmessage</url>
+		<connection>scm:git:https://github.com/datacleaner/extension_sendjmsmessage.git</connection>
+		<developerConnection>scm:git:https://github.com/datacleaner/extension_sendjmsmessage.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
 </project>
 
 		
