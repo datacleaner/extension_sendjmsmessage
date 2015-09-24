@@ -66,6 +66,9 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
     @Configured
     String templateEncoding = "UTF-8";
 
+    @Configured
+    boolean includeTemplateAsHeader = true;
+
     @Provided
     ComponentContext _componentContext;
 
@@ -139,7 +142,9 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
 
     protected String buildMessageBodyFromTemplate(String messageTemplateString, String[] keys, List<Object> values) {
         StringBuilder message = new StringBuilder();
-        message.append(messageTemplateString).append("\n");
+        if (includeTemplateAsHeader) {
+            message.append(messageTemplateString).append("\n");
+        }
 
         if (messageTemplateString == null || keys == null || values == null) {
             return "";
