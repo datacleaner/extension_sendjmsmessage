@@ -17,14 +17,6 @@
 	<packaging>jar</packaging>
 	<name>DataCleaner - JMS extension</name>
 
-	<repositories>
-		<repository>
-			<id>com.hi</id>
-			<name>internal releases</name>
-			<url>http://repo.humaninference.com/content/repositories/releases</url>
-		</repository>
-	</repositories>
-
 	<build>
 		<plugins>
 			<plugin>
