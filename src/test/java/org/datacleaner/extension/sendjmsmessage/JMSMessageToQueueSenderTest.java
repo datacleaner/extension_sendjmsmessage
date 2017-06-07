@@ -3,7 +3,6 @@ package org.datacleaner.extension.sendjmsmessage;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
-
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.Message;
@@ -14,8 +13,6 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.TransportConnector;
-import org.datacleaner.extension.sendjmsmessage.JMSMessageToQueueSender;
-import org.datacleaner.extension.sendjmsmessage.SendMessageToJMSQueueResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,11 +53,12 @@ public class JMSMessageToQueueSenderTest {
         session.close();
         connection.close();
     }
-    
+
+    //FIXME add additional tests for username and password
     @Test
     public void testGetOutputColumns() throws Exception {
         // producer
-        JMSMessageToQueueSender sender = new JMSMessageToQueueSender(brokerUrl, queueName);
+        JMSMessageToQueueSender sender = new JMSMessageToQueueSender(brokerUrl, queueName, "", "");
         String messageBody = "hello";
         String correlationId = "someId";
 

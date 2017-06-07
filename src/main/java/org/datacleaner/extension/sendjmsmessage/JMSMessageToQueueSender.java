@@ -1,11 +1,13 @@
 package org.datacleaner.extension.sendjmsmessage;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.elasticsearch.common.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +28,12 @@ public class JMSMessageToQueueSender {
      * @param queueName
      * @throws Exception
      */
-    public JMSMessageToQueueSender(String broker, String queueName) throws Exception {
+    public JMSMessageToQueueSender(String broker, String queueName, String username, String password) throws Exception {
         camelContext = new DefaultCamelContext();
-
-        PooledConnectionFactory connectionFactory = new PooledConnectionFactory(broker);
-        connectionFactory.setMaxConnections(10);
+        PooledConnectionFactory connectionFactory = createConnectionFactory(broker, username, password);
         final StringBuilder toEndpointUrl = new StringBuilder("jms:queue:").append(queueName);
         LOGGER.debug("connectionFactory {}", connectionFactory);
+
         // Note we can explicit name the component
         camelContext.addComponent("jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
         camelContext.addRoutes(new RouteBuilder() {
@@ -42,6 +43,17 @@ public class JMSMessageToQueueSender {
         });
         producerTemplate = camelContext.createProducerTemplate();
         camelContext.start();
+    }
+
+    private PooledConnectionFactory createConnectionFactory(String broker, String username, String password){
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(broker);
+        if(StringUtils.isNotBlank(username.trim()) && StringUtils.isNotBlank(password.trim())){
+            factory.setUserName(username);
+            factory.setPassword(password);
+        }
+        PooledConnectionFactory connectionFactory = new PooledConnectionFactory(factory);
+        connectionFactory.setMaxConnections(10);
+        return connectionFactory;
     }
 
     /**

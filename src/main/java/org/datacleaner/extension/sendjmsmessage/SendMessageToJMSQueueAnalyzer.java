@@ -18,6 +18,7 @@ import org.datacleaner.api.Close;
 import org.datacleaner.api.ComponentContext;
 import org.datacleaner.api.Concurrent;
 import org.datacleaner.api.Configured;
+import org.datacleaner.api.Convertable;
 import org.datacleaner.api.Description;
 import org.datacleaner.api.ExecutionLogMessage;
 import org.datacleaner.api.Initialize;
@@ -30,6 +31,7 @@ import org.datacleaner.components.categories.WriteSuperCategory;
 import org.datacleaner.components.convert.ConvertToStringTransformer;
 
 import com.google.common.base.Strings;
+import com.hi.datahub.dc.commons.PasswordConverter;
 
 /**
  * Analyzer for sending messages to JMS queue.
@@ -59,6 +61,13 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
 
     @Configured(value = "JMS queue name", order = 101)
     String jmsQueueName;
+
+    @Configured(value = "JMS queue username", order = 102, required = false)
+    String jmsQueueUserName;
+
+    @Convertable(PasswordConverter.class)
+    @Configured(value = "JMS queue password", order = 103, required = false)
+    String jmsQueuePassword;
 
     @Configured(value = "Message template", required = true)
     Resource messageTemplate;
@@ -95,7 +104,7 @@ public class SendMessageToJMSQueueAnalyzer implements Analyzer<SendMessageToJMSQ
     public void init() {
         _messageTemplateString = loadTemplate(messageTemplate);
         try {
-            _jmsMessageSender = new JMSMessageToQueueSender(brokerUrl, jmsQueueName);
+            _jmsMessageSender = new JMSMessageToQueueSender(brokerUrl, jmsQueueName, jmsQueueUserName, jmsQueuePassword);
         } catch (Exception e) {
             throw new IllegalStateException("JMS sender could not be initialized", e);
         }

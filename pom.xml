@@ -8,6 +8,8 @@
 	<properties>
 		<camel.version>2.15.2</camel.version>
 		<activemq.version>5.12.0</activemq.version>
+		<datacleaner.version>5.1.5</datacleaner.version>
+		<datahub-dc-commons.version>1.1.4</datahub-dc-commons.version>
 	</properties>
 	<groupId>org.eobjects.datacleaner.extensions</groupId>
 	<artifactId>DataCleaner-sendjmsmessage</artifactId>
@@ -126,8 +128,14 @@
 		<dependency>
 			<groupId>org.eobjects.datacleaner</groupId>
 			<artifactId>DataCleaner-desktop-ui</artifactId>
-			<version>4.5-RC1</version>
+			<version>${datacleaner.version}</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hi.datahub.dc</groupId>
+			<artifactId>datahub-dc-commons</artifactId>
+			<version>${datahub-dc-commons.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -136,6 +144,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<scm>
